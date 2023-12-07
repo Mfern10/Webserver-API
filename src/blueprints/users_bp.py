@@ -2,6 +2,8 @@ from setup import bcrypt, db
 from flask import Blueprint, request, jsonify
 from models.user import UserSchema, User
 from sqlalchemy.exc import IntegrityError
+from flask_jwt_extended import create_access_token
+from datetime import timedelta 
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 
@@ -15,11 +17,9 @@ def register():
             email=user_info['email'],
             password=bcrypt.generate_password_hash(user_info['password']).decode('utf8')
         )
-
         # Add and commit the new user information
         db.session.add(user)
         db.session.commit()
-
         # Return the new user information
         return UserSchema(exclude=['password']).dump(user), 201
     except IntegrityError:
@@ -38,6 +38,27 @@ def all_users():
 
     # Return the serialized users as a JSON response
     return jsonify(serialized_users), 200
+
+@users_bp.route('/login', methods = ['POST'])
+def login():
+    # Parse incoming POST body through user schema
+    user_info = UserSchema(exclude=['id', 'name', 'is_admin']).load(request.json)
+    print(user_info)
+    
+    # Select the user with email that matches the one in the POST body using select query and scalar
+    # Cross check the password hash
+    stmt = db.select(User).where(User.email == user_info['email'])
+    user = db.session.scalar(stmt)
+    if user and bcrypt.check_password_hash(user.password, user_info['password']):
+        
+        # Create a JWT token for the user
+        token = create_access_token(identity=user.id, expires_delta=timedelta(hours=8))
+        
+        # Return the JWT token or error if login details dont match
+        return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
+    else: 
+        return {'error': 'Invalid email or password'}, 401
+
 
 
 
