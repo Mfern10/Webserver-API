@@ -1,17 +1,24 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+from os import environ
+from marshmallow.exceptions import ValidationError
+
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://Roflgank3d:abc123@127.0.0.1:5432/web_server_api'
+app.config['JWT_SECRET_KEY'] = environ.get('JWT_KEY')
 
+# Links the postgres DB and user to the flask application
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DB_URI')
 db = SQLAlchemy(app)
-
+ma = Marshmallow(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 
 
 @app.route('/')
 def index():
-    return "success"
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return "IM WORKING IDIOT"
