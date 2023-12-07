@@ -1,11 +1,17 @@
 from setup import bcrypt, db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 from models.user import UserSchema, User
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+
 from datetime import timedelta 
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
+
+def current_user_is_admin():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(id=current_user_id, is_admin=True).first()
+    return user is not None
 
 
 @users_bp.route('/register', methods=['POST'])
@@ -58,6 +64,24 @@ def login():
         return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
     else: 
         return {'error': 'Invalid email or password'}, 401
+
+# Deletes the user from database only if the user is deleting themselves or user is ADMIN   
+@users_bp.route('/<int:user_id>', methods = ['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    current_user_id = get_jwt_identity() 
+
+    if current_user_id != user_id and not current_user_is_admin():
+        abort(403, description='Unauthorized to Delete user')
+    user = User.query.get(user_id)
+    if user is None:
+            abort(404, description='User not found')
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User deleted successfully'}), 200
+
 
 
 
