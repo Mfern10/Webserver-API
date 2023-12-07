@@ -42,6 +42,17 @@ There are several benefits to using SQLAlchemy and I have chosen to use it for m
 sources: https://vegibit.com/what-is-the-role-of-sqlalchemy-in-python-database-interactions/#advantages-of-using-sqlalchemy
 
 # R5 Document all endpoints for your API
+## User Endpoints
+### /users/ - GET 
+This endpoint allows an admin to access all users in the database. This endpoint uses SQL User.query.all() to get all users and serializes them to be returned and Displayed in JSON format. 
+
+### /users/register - POST
+This endpoint is a POST/Create, the endpoint is used for registering as a new user in the database. The user can input the required fields in insomnia/postman in JSON format and register as long as the email address is valid and not already in use. It uses TRY/EXCEPT handling for Integrity errors to ensure this. The register endpoint also uses bcrypt to hash the users password for security. 
+
+### /users/login - POST
+This endpoint is used to login as the user, logging in will create a JWT token for the user and depending on there authorisation will allow them to certain features of the API. The endpoint users SQL query select to first select the user where it meets the conditions that email and password match. If both email and password match the it will return the JWT token that that user can use to access certain features. if the details do not match the code will send them a error showing that the email or password are invalid.
+
+
 
 # R6 An ERD for your app
 
