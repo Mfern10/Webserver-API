@@ -4,15 +4,14 @@ from models.user import UserSchema, User
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from auth import authorize
-
 from datetime import timedelta 
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 
-def current_user_is_admin():
-    current_user_id = get_jwt_identity()
-    user = User.query.filter_by(id=current_user_id, is_admin=True).first()
-    return user is not None
+# def current_user_is_admin():
+#     current_user_id = get_jwt_identity()
+#     user = User.query.filter_by(id=current_user_id, is_admin=True).first()
+#     return user is not None
 
 
 @users_bp.route('/register', methods=['POST'])
@@ -66,13 +65,6 @@ def login():
     else: 
         return {'error': 'Invalid email or password'}, 401
     
-# Update user information only themselves or Admin
-
-        
-        
-    
-
-
 # Deletes the user from database only if the user is deleting themselves or user is ADMIN   
 @users_bp.route('/<int:user_id>', methods = ['DELETE'])
 @jwt_required()
