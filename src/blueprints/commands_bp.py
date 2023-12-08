@@ -20,6 +20,18 @@ def db_seed():
             email = 'admin@catalogue.com',
             password=bcrypt.generate_password_hash('password').decode('utf8'),
             is_admin=True
+        ),
+        User(
+            name = 'Bob Smith',
+            email = 'bob@catalogue.com',
+            password=bcrypt.generate_password_hash('iambob').decode('utf8'),
+            is_admin=False
+        ),
+        User(
+            name = 'Lee Smith',
+            email = 'lee@catalogue.com',
+            password=bcrypt.generate_password_hash('iamlee').decode('utf8'),
+            is_admin=False
         )
     ]
     print("Tables seeded")
