@@ -69,15 +69,18 @@ def login():
 @users_bp.route('/<int:user_id>', methods = ['DELETE'])
 @jwt_required()
 def delete_user(user_id):
-    stmt = db.select(User).filter_by(id=user_id)
-    user = db.session.scalar(stmt)
-    if user:
-        authorize()
-        db.session.delete(user)
-        db.session.commit()
-        return ({'message': 'User deleted successfully'}), 200
-    else:
-        return {'error': 'User not found'}, 404  
+    try:
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user:
+            authorize(user_id)
+            db.session.delete(user)
+            db.session.commit()
+            return ({'message': 'User deleted successfully'}), 200
+        else:
+            return {'error': 'User not found'}, 404 
+    except AttributeError:
+        return {'error': 'You are not authorized to perform this action'}, 401 
 
 
 
