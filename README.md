@@ -58,7 +58,11 @@ This endpoint allows admin to delete a user from the database. Users can also de
 ### UPDATE
 I decided to leave out update for users for security purposes. Users can Delete and re register if needed. After thinking on this for the scope of my Application I think for now leaving out update for users is the best situation but a function that can be implimented in the future.
 
-## Products Endpoints
+## Categories Endpoints
+### /categories/ - GET
+This endpoint retrieves all categories and displays them in a JSON format, it uses query.all() to retrive all users then serialises the categories schema to display them in JSON format. 
+
+ADD GET ONE
 
 
 # R6 An ERD for your app
