@@ -65,6 +65,13 @@ def login():
         return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
     else: 
         return {'error': 'Invalid email or password'}, 401
+    
+# Update user information only themselves or Admin
+
+        
+        
+    
+
 
 # Deletes the user from database only if the user is deleting themselves or user is ADMIN   
 @users_bp.route('/<int:user_id>', methods = ['DELETE'])
