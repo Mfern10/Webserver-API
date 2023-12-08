@@ -19,6 +19,6 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 
-@app.route('/')
-def index():
-    return "IM WORKING IDIOT"
+@app.errorhandler(401)
+def validation_error(err):
+    return {'error': 'You are not authorized to access this resource.'}
