@@ -52,6 +52,13 @@ This endpoint is a POST/Create, the endpoint is used for registering as a new us
 ### /users/login - POST
 This endpoint is used to login as the user, logging in will create a JWT token for the user and depending on there authorisation will allow them to certain features of the API. The endpoint users SQL query select to first select the user where it meets the conditions that email and password match. If both email and password match the it will return the JWT token that that user can use to access certain features. if the details do not match the code will send them a error showing that the email or password are invalid.
 
+### /users/{id} - DELETE
+This endpoint allows admin to delete a user from the database. Users can also delete themselves. Using JWT tokens we can confirm the identity of the user to see what authorisation they have. using a select query to select the inputted id and fetching it as a scalar if the user is then authorized it will db.session.delete(user) and commit the delete to the database.
+
+### UPDATE
+I decided to leave out update for users for security purposes. Users can Delete and re register if needed. After thinking on this for the scope of my Application I think for now leaving out update for users is the best situation but a function that can be implimented in the future.
+
+## Products Endpoints
 
 
 # R6 An ERD for your app
