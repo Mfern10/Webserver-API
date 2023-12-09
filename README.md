@@ -77,6 +77,16 @@ This endpoint uses a select and scalar retrieving 1 selected category by its id 
 
 ![categories endpoint showing one selected category](/docs/one_category.png)
 
+### /categories/ - POST
+This endpoint allows for the creation of a new category. Any user can can create a new category as long as the name of category doesnt already exist. The schema checks the database for same names and will throw an error if category exists if not it will accept the name and description add it to the database and return the new category as a JSON object.
+
+![categories endpoint that creates a new category](/docs/create_category.png)
+
+### /categories/{id} - PUT/PATCH
+This enpoint allows and admin to make updates to to the categories. using the category idea and db.select and scalar we can get the specific category and cross check with the schema to make updates. Either name or description or both can be updated by the admin. must make sure you use a bearer token of the admin to make changes.
+
+![categories endpoint showing update method](/docs/update_category.png)
+
 
 # R6 An ERD for your app
 
