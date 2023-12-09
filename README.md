@@ -83,9 +83,17 @@ This endpoint allows for the creation of a new category. Any user can can create
 ![categories endpoint that creates a new category](/docs/create_category.png)
 
 ### /categories/{id} - PUT/PATCH
-This enpoint allows and admin to make updates to to the categories. using the category idea and db.select and scalar we can get the specific category and cross check with the schema to make updates. Either name or description or both can be updated by the admin. must make sure you use a bearer token of the admin to make changes.
+This enpoint allows and admin to make updates to to the categories. using the category id and db.select and scalar we can get the specific category and cross check with the schema to make updates. Either name or description or both can be updated by the admin. must make sure you use a bearer token of the admin to make changes.
 
 ![categories endpoint showing update method](/docs/update_category.png)
+
+### /categories/{id} - DELETE
+This endpoint allows an admin to delete a category from the database. Must be selective with the category id to specify which category to delete. The endpoint uses SQL select to select the id from the categories table and returns with a scalar, It then uses db session command to delete the matching id and details from the database.
+
+![categories endpoint that deletes category](/docs/delete_category.png)
+
+## Products Endpoints
+
 
 
 # R6 An ERD for your app

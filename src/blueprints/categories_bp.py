@@ -32,7 +32,6 @@ def get_category(category_id):
     # if id is not in system will return a 404 error
     stmt = db.select(Category).filter_by(id=category_id)
     category = db.session.scalar(stmt)
-
     if category:
         return CategorySchema().dump(category)
     else:
@@ -54,6 +53,7 @@ def new_category():
             name = category_info['name'],
             description = category_info['description']
         )
+        authorize()
         db.session.add(category)
         db.session.commit()
         # return as JSON showing the details that it has been added correctly
@@ -76,6 +76,15 @@ def update_category(category_id):
     else:
         return {'error': 'Category not found'}, 401
 
-
-
-    
+@categories_bp.route('/<int:category_id>', methods=['DELETE'])
+@jwt_required()
+def delete_category(category_id):
+        stmt = db.select(Category).filter_by(id=category_id)
+        category = db.session.scalar(stmt)
+        if category:
+            authorize()
+            db.session.delete(category)
+            db.session.commit()
+            return ({'message': 'Category deleted successfully'})
+        else:
+            return {'error': 'Category not found'}, 404
