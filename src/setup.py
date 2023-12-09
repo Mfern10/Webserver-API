@@ -21,4 +21,4 @@ jwt = JWTManager(app)
 
 @app.errorhandler(401)
 def validation_error(err):
-    return {'error': 'You are not authorized to access this resource.'}
+    return {'error': 'You are not authorized to access this resource.'}, 401

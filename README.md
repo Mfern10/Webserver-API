@@ -44,16 +44,24 @@ sources: https://vegibit.com/what-is-the-role-of-sqlalchemy-in-python-database-i
 # R5 Document all endpoints for your API
 ## User Endpoints
 ### /users/ - GET 
-This endpoint allows an admin to access all users in the database. This endpoint uses SQL User.query.all() to get all users and serializes them to be returned and Displayed in JSON format. 
+This endpoint allows a user to access all users in the database. This endpoint uses SQL User.query.all() to get all users and serializes them to be returned and Displayed in JSON format. It excludes sensitive information for security purposes.
+
+![Shows users endpoint in insomnia](/docs/all_users.png)
 
 ### /users/register - POST
 This endpoint is a POST/Create, the endpoint is used for registering as a new user in the database. The user can input the required fields in insomnia/postman in JSON format and register as long as the email address is valid and not already in use. It uses TRY/EXCEPT handling for Integrity errors to ensure this. The register endpoint also uses bcrypt to hash the users password for security. 
 
+![users endpoint showing registration](/docs/register.png)
+
 ### /users/login - POST
 This endpoint is used to login as the user, logging in will create a JWT token for the user and depending on there authorisation will allow them to certain features of the API. The endpoint users SQL query select to first select the user where it meets the conditions that email and password match. If both email and password match the it will return the JWT token that that user can use to access certain features. if the details do not match the code will send them a error showing that the email or password are invalid.
 
+![users endpoint showing login system](/docs/login.png)
+
 ### /users/{id} - DELETE
 This endpoint allows admin to delete a user from the database. Users can also delete themselves. Using JWT tokens we can confirm the identity of the user to see what authorisation they have. using a select query to select the inputted id and fetching it as a scalar if the user is then authorized it will db.session.delete(user) and commit the delete to the database.
+
+![users endpoint showing deleting a user successfully](/docs/delete_user.png)
 
 ### UPDATE
 I decided to leave out update for users for security purposes. Users can Delete and re register if needed. After thinking on this for the scope of my Application I think for now leaving out update for users is the best situation but a function that can be implimented in the future.
@@ -62,7 +70,12 @@ I decided to leave out update for users for security purposes. Users can Delete 
 ### /categories/ - GET
 This endpoint retrieves all categories and displays them in a JSON format, it uses query.all() to retrive all users then serialises the categories schema to display them in JSON format. 
 
-ADD GET ONE
+![categories endpoint showing all categories](/docs/all_categories.png)
+
+### /categories/{id} - GET
+This endpoint uses a select and scalar retrieving 1 selected category by its id from the database and returning it as a JSON object. All details of categories can be displayed as there is no security risk.
+
+![categories endpoint showing one selected category](/docs/one_category.png)
 
 
 # R6 An ERD for your app
