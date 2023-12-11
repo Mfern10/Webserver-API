@@ -62,6 +62,24 @@ def db_seed():
             date_created = datetime.today(),
             user_id = 1,
             category_id = 1
+        ),
+        Product(
+            name = 'Nest Demin Jeans',
+            description = 'Premium Skinny leg, stretch fabric jeans with embroided nest logo.',
+            price = '69.99',
+            color = 'Navy',
+            date_created = datetime.today(),
+            user_id = 1,
+            category_id = 2
+        ),
+        Product(
+            name = 'Nest Ribbed Beanie',
+            description = 'Premium organic cotton, ribbed fit reversible beanie, great for winter',
+            price = '29.99',
+            color = 'Black',
+            date_created = datetime.today(),
+            user_id = 1,
+            category_id = 3
         )
     ]
     print("Tables seeded")

@@ -23,6 +23,9 @@ class Product(db.Model):
 class ProductSchema(ma.Schema):
     name = fields.String(required=True)
     description = fields.String(required=True)
+    price = fields.Float(required=True)
+    color = fields.String(required=True)
+    category_id = fields.Integer(required=True)
 
     class Meta:
-        fields = ('id', 'name', 'description', 'price', 'color', 'date_created')
+        fields = ('id', 'name', 'description', 'price', 'color', 'date_created', 'category_id')
