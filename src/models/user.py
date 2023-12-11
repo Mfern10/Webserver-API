@@ -13,6 +13,7 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
 
     products = db.relationship('Product', back_populates='user')
+    reviews = db.relationship('Review', back_populates='user')
 
 
 class UserSchema(ma.Schema):
