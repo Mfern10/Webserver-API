@@ -82,16 +82,16 @@ def update_product(product_id):
     else:
         return {'error': 'Product not found'}, 401
 
-# @categories_bp.route('/<int:category_id>', methods=['DELETE'])
-# @jwt_required()
-# def delete_category(category_id):
-#         stmt = db.select(Category).filter_by(id=category_id)
-#         category = db.session.scalar(stmt)
-#         if category:
-#             authorize()
-#             db.session.delete(category)
-#             db.session.commit()
-#             return ({'message': 'Category deleted successfully'})
-#         else:
-#             return {'error': 'Category not found'}, 404
+@products_bp.route('/<int:product_id>', methods=['DELETE'])
+@jwt_required()
+def delete_product(product_id):
+        stmt = db.select(Product).filter_by(id=product_id)
+        product = db.session.scalar(stmt)
+        if product:
+            authorize()
+            db.session.delete(product)
+            db.session.commit()
+            return ({'message': 'Product deleted successfully'}), 200
+        else:
+            return {'error': 'Product not found'}, 404
 

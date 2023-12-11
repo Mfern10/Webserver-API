@@ -114,6 +114,11 @@ This endpoint updates a product if the user is an admin or the creator of the pr
 
 ![products endpoint that updates a product](/docs/update_product.png)
 
+### /products/{id} - DELETE
+This endpoint allows an admin to delete a product from the database. by specifying the id of the product in the route it will use a SQL stmt deb.select and scalar to retrive the product and deletes it from the database with db.delete.
+
+![products endpoint that deletes a product from the database](/docs/delete_product.png)
+
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use
