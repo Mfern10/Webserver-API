@@ -21,11 +21,11 @@ class Product(db.Model):
 
 
 class ProductSchema(ma.Schema):
-    name = fields.String(required=True)
-    description = fields.String(required=True)
-    price = fields.Float(required=True)
-    color = fields.String(required=True)
-    category_id = fields.Integer(required=True)
+    name = fields.String()
+    description = fields.String()
+    price = fields.Float()
+    color = fields.String()
+    category_id = fields.Integer()
 
     class Meta:
-        fields = ('id', 'name', 'description', 'price', 'color', 'date_created', 'category_id')
+        fields = ('id', 'name', 'description', 'price', 'color', 'date_created', 'category_id', 'user_id')

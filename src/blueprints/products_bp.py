@@ -3,6 +3,7 @@ from models.product import Product, ProductSchema
 from setup import db
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from auth import authorize
 
 products_bp = Blueprint('products_bp', __name__, url_prefix='/products')
 
@@ -63,58 +64,23 @@ def new_product():
         return jsonify({'error': 'Integrity error occured while creating product'}), 500
 
   
-
-
-
-
-
-
-
-
-
-# @products_bp.route('/', methods=['POST'])
-# # @jwt_required()
-# # def new_product():
-# #     try:
-# #         current_user_id = get_jwt_identity()
-# #         # set variable for information collected from user must match the Product schema
-# #         product_info = ProductSchema(exclude=['id']).load(request.json)
-# #         # check if Product already exists by using SQL query to check the database 
-# #         #product names with user input product name produce error if already exists
-# #         existing_product = Product.query.filter_by(name=product_info['name']).first()
-# #         if existing_product:
-# #             return jsonify({'error': 'Category already exists'}, 400)
-# #         # gather the information from user and cross check then add category to db
-# #         product = Product(
-# #             name = product_info['name'],
-# #             description = product_info['description'],
-# #             price = product_info['price'],
-# #             color = product_info['color'],
-# #             user_id = current_user_id,
-# #             category_id = product_info['category_id']
-# #         )
-        
-# #         db.session.add(product)
-# #         db.session.commit()
-# #         # return as JSON showing the details that it has been added correctly
-# #         return ProductSchema().dump(product), 201
-# #     except IntegrityError:
-#         return jsonify({'error': 'Integrity error occured while creating product'}), 500
-    
-# @categories_bp.route('/<int:category_id>', methods=['PUT', 'PATCH'])
-# @jwt_required()
-# def update_category(category_id):
-#     category_info = CategorySchema(exclude=['id']).load(request.json)
-#     stmt = db.select(Category).filter_by(id=category_id)
-#     category = db.session.scalar(stmt)
-#     if category:
-#         authorize()
-#         category.name = category_info.get('name', category.name)
-#         category.description = category_info.get('description', category.description)
-#         db.session.commit()
-#         return CategorySchema().dump(category)
-#     else:
-#         return {'error': 'Category not found'}, 401
+@products_bp.route('/<int:product_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_product(product_id):
+    product_info = ProductSchema(exclude=['id','user_id', 'date_created']).load(request.json)
+    stmt = db.select(Product).filter_by(id=product_id)
+    product = db.session.scalar(stmt)
+    if product:
+        authorize(product.user_id)
+        product.name = product_info.get('name', product.name)
+        product.description = product_info.get('description', product.description)
+        product.price = product_info.get('price', product.price)
+        product.color = product_info.get('color', product.color)
+        product.category_id = product_info.get('category_id', product.category_id)
+        db.session.commit()
+        return ProductSchema().dump(product)
+    else:
+        return {'error': 'Product not found'}, 401
 
 # @categories_bp.route('/<int:category_id>', methods=['DELETE'])
 # @jwt_required()

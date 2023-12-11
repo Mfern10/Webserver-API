@@ -109,6 +109,11 @@ This endpoint allows the logged in user(must use JWT token as bearer ) to create
 
 ![products endpoint that creates a new product](/docs/Create_product.png)
 
+### /products/{id} - PUT/PATCH
+This endpoint updates a product if the user is an admin or the creator of the product. it used .get to retieve the information and changes it to the users input then displays the updated record.
+
+![products endpoint that updates a product](/docs/update_product.png)
+
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use
