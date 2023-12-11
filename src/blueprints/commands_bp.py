@@ -2,6 +2,8 @@ from setup import db, bcrypt
 from flask import Blueprint
 from models.user import User
 from models.category import Category
+from models.product import Product
+from datetime import datetime
 
 db_commands = Blueprint('db', __name__)
 
@@ -50,8 +52,21 @@ def db_seed():
             description = 'A collection of headwear including beanies, baseball caps, trucker caps, bucket hats etc'
         )
     ]
+
+    products = [
+        Product(
+            name = 'Nest Logo Tee',
+            description = 'Premium organic cotton, tall fit t-shirt with nest logo embroided',
+            price = '59.99',
+            color = 'Black',
+            date_created = datetime.today(),
+            user_id = 1,
+            category_id = 1
+        )
+    ]
     print("Tables seeded")
 
     db.session.add_all(users)
     db.session.add_all(categories)
+    db.session.add_all(products)
     db.session.commit()

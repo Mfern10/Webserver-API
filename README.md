@@ -94,6 +94,11 @@ This endpoint allows an admin to delete a category from the database. Must be se
 
 ## Products Endpoints
 
+### /products/ - GET
+This endpoint allows a user to get a lst of all products and the information. It uses SQL alchemy query.all() to select all products in the db and return them as a JSON object in insomnia.
+
+![products endpoint that shows all products in DB](/docs/all_products.png)
+
 
 
 # R6 An ERD for your app

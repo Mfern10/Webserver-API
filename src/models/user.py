@@ -12,6 +12,8 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    products = db.relationship('Product', back_populates='user')
+
 
 class UserSchema(ma.Schema):
     email = fields.Email(required=True)
