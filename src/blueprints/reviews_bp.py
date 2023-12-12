@@ -76,20 +76,20 @@ def new_review():
 
 
     
-# @categories_bp.route('/<int:category_id>', methods=['PUT', 'PATCH'])
-# @jwt_required()
-# def update_category(category_id):
-#     category_info = CategorySchema(exclude=['id']).load(request.json)
-#     stmt = db.select(Category).filter_by(id=category_id)
-#     category = db.session.scalar(stmt)
-#     if category:
-#         authorize()
-#         category.name = category_info.get('name', category.name)
-#         category.description = category_info.get('description', category.description)
-#         db.session.commit()
-#         return CategorySchema().dump(category)
-#     else:
-#         return {'error': 'Category not found'}, 401
+@reviews_bp.route('/<int:review_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_review(review_id):
+    review_info = ReviewSchema(exclude=['id', 'product_id']).load(request.json)
+    stmt = db.select(Review).filter_by(id=review_id)
+    review = db.session.scalar(stmt)
+    if review:
+        authorize(review.user_id)
+        review.title = review_info.get('title', review.title)
+        review.message = review_info.get('message', review.message)
+        db.session.commit()
+        return ReviewSchema().dump(review)
+    else:
+        return {'error': 'Review not found'}, 401
 
 # @categories_bp.route('/<int:category_id>', methods=['DELETE'])
 # @jwt_required()

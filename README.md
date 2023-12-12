@@ -135,6 +135,10 @@ This endpoint creates a new review on a product it can specify a title a message
 
 ![enpoint that creates a review](/docs/new_review.png)
 
+### /reviews/{id} - PUT/PATCH
+This endpoint allows the admin or owner of the review to update the title or message of the review. So JWT is required to check the authorization function. using the id it selects the review to be updatd with db.select and filters by the ID, If all tests pass it will return the successfully updated review info.
+
+![enpoint updates specific review](/docs/update_review.png)
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use

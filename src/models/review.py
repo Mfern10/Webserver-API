@@ -17,8 +17,8 @@ class Review(db.Model):
     product = db.relationship('Product', back_populates='reviews')
 
 class ReviewSchema(ma.Schema):
-    title = fields.String(required=True)
-    message = fields.String(required=True)
+    title = fields.String()
+    message = fields.String()
 
     class Meta:
         fields = ('id', 'title', 'message', 'user_id', 'product_id')
