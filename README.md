@@ -125,6 +125,11 @@ This endpoint gets a list of all reviews in the system and shows who created the
 
 ![reviews endpoint that shows all reviews in the system](/docs/all_reviews.png)
 
+### /reviews/{id} - GET
+This endpoint retrieves a specific review. specifying the review ID it will use select stmt and sclar to find and retrieve the review and return it in JSON format. 
+
+![gets one review](/docs/one_review.png)
+
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use

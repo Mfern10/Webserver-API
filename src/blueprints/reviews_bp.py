@@ -19,19 +19,19 @@ def all_reviews():
     # Return all categories in JSOn format
     return jsonify(serialized_reviews), 200
 
-# # Get specific category
-# @categories_bp.route('/<int:category_id>', methods = ['GET'])
+# # Get specific review
+@reviews_bp.route('/<int:review_id>', methods = ['GET'])
 # @jwt_required()
-# def get_category(category_id):
-#     # use stmt db.select query with scalar to select a specific category from the table,
-#     # as long as ID matches all details of category will be returned as no security issues.
-#     # if id is not in system will return a 404 error
-#     stmt = db.select(Category).filter_by(id=category_id)
-#     category = db.session.scalar(stmt)
-#     if category:
-#         return CategorySchema().dump(category)
-#     else:
-#         return {'error': 'Category not found'}, 404
+def get_review(review_id):
+    # use stmt db.select query with scalar to select a specific review from the table,
+    # as long as ID matches all details of review will be returned as no security issues.
+    # if id is not in system will return a 404 error
+    stmt = db.select(Review).filter_by(id=review_id)
+    review = db.session.scalar(stmt)
+    if review:
+        return ReviewSchema().dump(review)
+    else:
+        return {'error': 'Review not found'}, 404
     
 # @categories_bp.route('/', methods=['POST'])
 # @jwt_required()
