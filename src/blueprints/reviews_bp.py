@@ -91,15 +91,15 @@ def update_review(review_id):
     else:
         return {'error': 'Review not found'}, 401
 
-# @categories_bp.route('/<int:category_id>', methods=['DELETE'])
-# @jwt_required()
-# def delete_category(category_id):
-#         stmt = db.select(Category).filter_by(id=category_id)
-#         category = db.session.scalar(stmt)
-#         if category:
-#             authorize()
-#             db.session.delete(category)
-#             db.session.commit()
-#             return ({'message': 'Category deleted successfully'})
-#         else:
-#             return {'error': 'Category not found'}, 404
+@reviews_bp.route('/<int:review_id>', methods=['DELETE'])
+@jwt_required()
+def delete_review(review_id):
+        stmt = db.select(Review).filter_by(id=review_id)
+        review = db.session.scalar(stmt)
+        if review:
+            authorize()
+            db.session.delete(review)
+            db.session.commit()
+            return ({'message': 'Review deleted successfully'})
+        else:
+            return {'error': 'Review not found'}, 404

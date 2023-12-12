@@ -139,6 +139,12 @@ This endpoint creates a new review on a product it can specify a title a message
 This endpoint allows the admin or owner of the review to update the title or message of the review. So JWT is required to check the authorization function. using the id it selects the review to be updatd with db.select and filters by the ID, If all tests pass it will return the successfully updated review info.
 
 ![enpoint updates specific review](/docs/update_review.png)
+
+### /reviews/{id} - DELETE
+This endpoint deletes a review from the system. it uses db.select to select the specific ID and checks for authorisation. When it is found it will delete from the DB and show a confirmation message. IF not authorised it will throw an error.
+
+![enpoint that deletes a review](/docs/success_delete_review.png)
+![failed delete](/docs/failed_delete_review.png)
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use
