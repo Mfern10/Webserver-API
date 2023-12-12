@@ -146,8 +146,22 @@ This endpoint deletes a review from the system. it uses db.select to select the 
 ![enpoint that deletes a review](/docs/success_delete_review.png)
 ![failed delete](/docs/failed_delete_review.png)
 # R6 An ERD for your app
+This outlines the ERD for my application. My application uses 4 models that have different relationships with each other. It uses crows foot notation to show the relationships between my entities in the diagram. 
+![ERD for Webserver API](/docs/ERD.png)
 
 # R7 Detail any third party services that your app will use
+
+### Bcrypt
+Flask Bcrypt is and extension of the Python Framework Flask. It is used for password hashing and verification, It provides a way to hash the passwords before they are stored in the database for security.
+### JWT-Extended
+Flask-JWT-Extended is an extension of flask that implements JSON Web Tokens(JWT) for authenticating users and autorization on flask applications. With this extension you can create and retrieve JWT tokens and verify them which can help us secure the data.
+### marshmallow
+Marshmallow is what allows us to use object serialization in our Flask application. such as serialzation of objects, dictionaries and mainly JSON. It allows us to define schemas for validating serialized data and provides a simple way to convert complex data structures into native python data types and back.
+### psycopg2-binary
+Psycopg2 binary is a python library used to interact with the database(PostgreSQL) from the python application. Psycopg2 binary is essentially a database adapter that allows the communication between our python program and the database.
+### SQLAlchemy
+SQLAlchemy is a python SQL toolkit and Object-Relational Mapping (ORM) library. It uses a high level interface to interact with relational databases such as PostgreSQL through python. 
+It allows us to apply Object Orientated Programming(OOP) to the database and allows us to use database and SQL commands in a more robust manner.
 
 # R8 Describe your projects models in terms of the relationships they have with each other
 
