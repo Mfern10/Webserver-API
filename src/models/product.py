@@ -19,6 +19,8 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     category = db.relationship('Category', back_populates='products')
 
+    reviews = db.relationship('Review', back_populates='product')
+
 
 class ProductSchema(ma.Schema):
     name = fields.String()

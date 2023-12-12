@@ -13,9 +13,12 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='reviews')
 
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    product = db.relationship('Product', back_populates='reviews')
+
 class CategorySchema(ma.Schema):
     title = fields.String(required=True)
     message = fields.String(required=True)
 
     class Meta:
-        fields = ('id', 'title', 'message')
+        fields = ('id', 'title', 'message', 'user_id', 'product_id')

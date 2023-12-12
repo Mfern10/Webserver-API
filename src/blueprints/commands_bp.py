@@ -4,6 +4,7 @@ from models.user import User
 from models.category import Category
 from models.product import Product
 from datetime import datetime
+from models.review import Review
 
 db_commands = Blueprint('db', __name__)
 
@@ -82,9 +83,18 @@ def db_seed():
             category_id = 3
         )
     ]
+    reviews = [
+        Review(
+            title = 'Review 1',
+            message = 'This is a test review',
+            user_id = 1,
+            product_id = 1
+        )
+    ]
     print("Tables seeded")
 
     db.session.add_all(users)
     db.session.add_all(categories)
     db.session.add_all(products)
+    db.session.add_all(reviews)
     db.session.commit()
