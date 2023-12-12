@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
 from setup import db
 from models.review import Review, ReviewSchema 
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from auth import authorize
+from sqlalchemy.exc import IntegrityError
+from models.product import Product
 
 reviews_bp = Blueprint('reviews_bp', __name__, url_prefix='/reviews')
 
@@ -33,29 +36,45 @@ def get_review(review_id):
     else:
         return {'error': 'Review not found'}, 404
     
-# @categories_bp.route('/', methods=['POST'])
-# @jwt_required()
-# def new_category():
-#     try:
-#         # set variable for information collected from user must match the category schema
-#         category_info = CategorySchema(exclude=['id']).load(request.json)
-#         # check if category already exists by using SQL query to check the database 
-#         #category names with user input category name produce error if already exists
-#         existing_category = Category.query.filter_by(name=category_info['name']).first()
-#         if existing_category:
-#             return jsonify({'error': 'Category already exists'}, 400)
-#         # gather the information from user and cross check then add category to db
-#         category = Category(
-#             name = category_info['name'],
-#             description = category_info['description']
-#         )
-#         authorize()
-#         db.session.add(category)
-#         db.session.commit()
-#         # return as JSON showing the details that it has been added correctly
-#         return CategorySchema().dump(category), 201
-#     except IntegrityError:
-#         return jsonify({'error': 'Integrity error occured while creating category'}), 500
+@reviews_bp.route('/', methods=['POST'])
+@jwt_required()
+def new_review():
+    try:
+        current_user_id = get_jwt_identity()
+        review_info = ReviewSchema().load(request.json)  # Load entire schema
+        
+        # Check if the product_id exists in the database
+        product_id = review_info.get('product_id')
+        product = Product.query.get(product_id)
+        if not product:
+            return jsonify({'error': 'Product not found'}, 404)
+        
+        # Check if the user has already reviewed the product with the same title
+        existing_review = Review.query.filter_by(
+            user_id=current_user_id,
+            product_id=product_id,
+            title=review_info.get('title')
+        ).first()
+        if existing_review:
+            return jsonify({'error': 'You have already reviewed this product'}), 400
+        
+        review = Review(
+            title=review_info['title'],
+            message=review_info['message'],
+            product_id=product_id,
+            user_id=current_user_id
+        )
+        
+        db.session.add(review)
+        db.session.commit()
+        
+        return ReviewSchema().dump(review), 201
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'error': 'Integrity error occurred while creating review'}), 500
+
+
+
     
 # @categories_bp.route('/<int:category_id>', methods=['PUT', 'PATCH'])
 # @jwt_required()

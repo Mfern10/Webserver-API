@@ -130,6 +130,11 @@ This endpoint retrieves a specific review. specifying the review ID it will use 
 
 ![gets one review](/docs/one_review.png)
 
+### /reviews/ - POST
+This endpoint creates a new review on a product it can specify a title a message and a product id to select. it checks if reviews are specific and if product exists to leave reviews on.
+
+![enpoint that creates a review](/docs/new_review.png)
+
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use
