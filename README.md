@@ -119,6 +119,12 @@ This endpoint allows an admin to delete a product from the database. by specifyi
 
 ![products endpoint that deletes a product from the database](/docs/delete_product.png)
 
+## Review Endpoints
+### /reviews/ - GET
+This endpoint gets a list of all reviews in the system and shows who created them and what product id they are created for. It retrieves them from database using query.all() and returns them as a JSON object.
+
+![reviews endpoint that shows all reviews in the system](/docs/all_reviews.png)
+
 # R6 An ERD for your app
 
 # R7 Detail any third party services that your app will use

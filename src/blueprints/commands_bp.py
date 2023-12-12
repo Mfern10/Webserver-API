@@ -89,6 +89,12 @@ def db_seed():
             message = 'This is a test review',
             user_id = 1,
             product_id = 1
+        ),
+        Review(
+            title = 'Review 2',
+            message = 'This is a test review review review review',
+            user_id = 2,
+            product_id = 3
         )
     ]
     print("Tables seeded")

@@ -16,7 +16,7 @@ class Review(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
     product = db.relationship('Product', back_populates='reviews')
 
-class CategorySchema(ma.Schema):
+class ReviewSchema(ma.Schema):
     title = fields.String(required=True)
     message = fields.String(required=True)
 
