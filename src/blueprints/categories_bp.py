@@ -14,16 +14,14 @@ categories_bp = Blueprint('categories_bp', __name__, url_prefix='/categories')
 @categories_bp.route('/', methods=['GET'])
 @jwt_required()
 def all_categories():
-    # uses query all to collect all categories from the database instead of using
-    # scalar as query.all() will quickly gather all the categories
+    # Retrieving all categories from the database
     categories = Category.query.all()
 
-    # Serialize all the categories using marshmallow schema exluding any information not nessacery
-    categories_schema = CategorySchema(many=True)
-    serialized_categories = categories_schema.dump(categories)
+    # Serializing all categories using CategorySchema
+    serialized_categories = CategorySchema(many=True).dump(categories)
 
-    # Return all categories in JSOn format
-    return jsonify(serialized_categories), 200
+    # Returning all categories as JSON
+    return serialized_categories, 200
 
 # Get specific category
 
@@ -31,14 +29,17 @@ def all_categories():
 @categories_bp.route('/<int:category_id>', methods=['GET'])
 @jwt_required()
 def get_category(category_id):
-    # use stmt db.select query with scalar to select a specific category from the table,
-    # as long as ID matches all details of category will be returned as no security issues.
-    # if id is not in system will return a 404 error
+    # Querying a specific category from the database by ID
     stmt = db.select(Category).filter_by(id=category_id)
     category = db.session.scalar(stmt)
+
+    # Handling the retrieved category data
     if category:
-        return CategorySchema().dump(category)
+        # Serializing the retrieved category using CategorySchema
+        serialized_category = CategorySchema().dump(category)
+        return serialized_category, 200  # Returning the serialized category
     else:
+        # Returning a 404 error if category not found
         return {'error': 'Category not found'}, 404
 
 
@@ -46,54 +47,74 @@ def get_category(category_id):
 @jwt_required()
 def new_category():
     try:
-        # set variable for information collected from user must match the category schema
+        # Loading and validating user-provided data using CategorySchema
         category_info = CategorySchema(exclude=['id']).load(request.json)
-        # check if category already exists by using SQL query to check the database
-        # category names with user input category name produce error if already exists
+
+        # Checking if the category already exists in the database
         existing_category = Category.query.filter_by(
             name=category_info['name']).first()
         if existing_category:
             return jsonify({'error': 'Category already exists'}, 400)
-        # gather the information from user and cross check then add category to db
+
+        # Creating a new category and adding it to the database
         category = Category(
             name=category_info['name'],
             description=category_info['description']
         )
-        authorize()
+        authorize()  # Authorization logic (if applicable)
         db.session.add(category)
         db.session.commit()
-        # return as JSON showing the details that it has been added correctly
+
+        # Returning the details of the added category as JSON
         return CategorySchema().dump(category), 201
     except IntegrityError:
-        return jsonify({'error': 'Integrity error occured while creating category'}), 500
+        # Handling integrity error while creating the category
+        return jsonify({'error': 'Integrity error occurred while creating category'}), 500
 
 
 @categories_bp.route('/<int:category_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_category(category_id):
+    # Loading user-provided data and querying the category by ID
     category_info = CategorySchema(exclude=['id']).load(request.json)
     stmt = db.select(Category).filter_by(id=category_id)
     category = db.session.scalar(stmt)
+
+    # Handling the retrieved category data
     if category:
-        authorize()
+        authorize()  # Authorizing the update action
+
+        # Updating category details if provided in the request, else keeping the existing values
         category.name = category_info.get('name', category.name)
         category.description = category_info.get(
             'description', category.description)
-        db.session.commit()
+
+        db.session.commit()  # Committing the changes to the database
+
+        # Returning the updated category details as JSON
         return CategorySchema().dump(category)
     else:
+        # Returning a 401 error if category is not found
         return {'error': 'Category not found'}, 401
 
 
 @categories_bp.route('/<int:category_id>', methods=['DELETE'])
 @jwt_required()
 def delete_category(category_id):
+    # Querying the category by ID
     stmt = db.select(Category).filter_by(id=category_id)
     category = db.session.scalar(stmt)
+
+    # Handling the retrieved category data
     if category:
-        authorize()
+        authorize()  # Authorizing the delete action
+
+        # Deleting the category from the database
         db.session.delete(category)
         db.session.commit()
-        return ({'message': 'Category deleted successfully'})
+
+        # Returning a success message upon successful deletion
+        return {'message': 'Category deleted successfully'}
     else:
+        # Returning a 404 error if the category is not found
         return {'error': 'Category not found'}, 404
