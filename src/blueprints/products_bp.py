@@ -12,6 +12,7 @@ products_bp = Blueprint('products_bp', __name__, url_prefix='/products')
 
 
 @products_bp.route('/', methods=['GET'])
+@jwt_required()
 def all_products():
     # Retrieving all prducts from the database
     products = Product.query.all()
@@ -25,6 +26,7 @@ def all_products():
 
 
 @products_bp.route('/<int:product_id>', methods=['GET'])
+@jwt_required()
 def get_product(product_id):
     # Select query for specific product by ID
     stmt = db.select(Product).filter_by(id=product_id)
@@ -123,7 +125,7 @@ def delete_product(product_id):
 
     # Handling the Retrieved data
     if product:
-        authorize()  # Autorizes the delete action if logic met
+        authorize(product.user_id)  # Autorizes the delete action if logic met
 
         # Delete the product and commit to the database
         db.session.delete(product)

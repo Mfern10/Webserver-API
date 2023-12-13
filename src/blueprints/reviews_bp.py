@@ -122,7 +122,7 @@ def delete_review(review_id):
     # Handles the retrieved data
     if review:
         # Authorize the user before deleting the review
-        authorize()
+        authorize(review.user_id)
 
         # Delete the selected review and commit changes to the database
         db.session.delete(review)

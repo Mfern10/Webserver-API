@@ -38,6 +38,7 @@ def register():
 
 # Get all users
 @users_bp.route('/', methods=['GET'])
+@jwt_required()
 def all_users():
     # Use query to retrieve all users from the database
     # Using query.all() to get all users instead of scalar
