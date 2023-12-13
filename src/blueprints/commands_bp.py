@@ -89,15 +89,21 @@ def db_seed():
     ]
     reviews = [
         Review(
-            title='Review 1',
-            message='This is a test review',
+            title='4 stars',
+            message='A Great T-Shirt, very comfortable',
             user_id=1,
             product_id=1
         ),
         Review(
-            title='Review 2',
-            message='This is a test review review review review',
+            title='Great fit',
+            message='These skinny jeans feel great just the right stretching and very tough',
             user_id=2,
+            product_id=2
+        ),
+        Review(
+            title='SO WARM!',
+            message='This beanie is super warm and great for winter weather',
+            user_id=3,
             product_id=3
         )
     ]
