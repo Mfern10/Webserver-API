@@ -32,11 +32,12 @@ def get_product(product_id):
 
     # Handling the retrieved product data
     if product:
-        # Serialize the retrieved product using ProductSchema 
+        # Serialize the retrieved product using ProductSchema
         # Return as JSON
         return ProductSchema().dump(product)
     else:
-        return {'error': 'Product not found'}, 404 # Returning 404 if product not found
+        # Returning 404 if product not found
+        return {'error': 'Product not found'}, 404
 
 
 @products_bp.route('/', methods=['POST'])
@@ -72,7 +73,7 @@ def new_product():
 
         # Returns newly created product as JSON
         return ProductSchema().dump(product), 201
-    
+
     # Shows Integreity 500 if error occurs
     except IntegrityError:
         return jsonify({'error': 'Integrity error occured while creating product'}), 500
@@ -84,7 +85,7 @@ def update_product(product_id):
     # Loading and validating the user provided data using ProductSchema
     product_info = ProductSchema(
         exclude=['id', 'user_id', 'date_created']).load(request.json)
-    
+
     # Uses Selecy to query the specific product by its ID
     stmt = db.select(Product).filter_by(id=product_id)
     product = db.session.scalar(stmt)
@@ -102,14 +103,15 @@ def update_product(product_id):
         product.color = product_info.get('color', product.color)
         product.category_id = product_info.get(
             'category_id', product.category_id)
-        
+
         # Commiting the changes to the product to the database
         db.session.commit()
 
         # Returns the updated product details as JSON
         return ProductSchema().dump(product)
     else:
-        return {'error': 'Product not found'}, 404 # Returns 401 if ID does not exist
+        # Returns 401 if ID does not exist
+        return {'error': 'Product not found'}, 404
 
 
 @products_bp.route('/<int:product_id>', methods=['DELETE'])
@@ -121,7 +123,7 @@ def delete_product(product_id):
 
     # Handling the Retrieved data
     if product:
-        authorize() # Autorizes the delete action if logic met
+        authorize()  # Autorizes the delete action if logic met
 
         # Delete the product and commit to the database
         db.session.delete(product)
@@ -130,4 +132,5 @@ def delete_product(product_id):
         # Returning a message indicating successful delete
         return ({'message': 'Product deleted successfully'}), 200
     else:
-        return {'error': 'Product not found'}, 404 # Returns error 404 if ID does not exist
+        # Returns error 404 if ID does not exist
+        return {'error': 'Product not found'}, 404

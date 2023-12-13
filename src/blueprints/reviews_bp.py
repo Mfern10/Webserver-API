@@ -10,33 +10,33 @@ reviews_bp = Blueprint('reviews_bp', __name__, url_prefix='/reviews')
 
 
 @reviews_bp.route('/', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def all_reviews():
-    # uses query all to collect all Reviews from the database instead of using
-    # scalar as query.all() will quickly gather all the reviews
+    # uses query all method to query all the reviews in the database
     reviews = Review.query.all()
 
-    # Serialize all the reviews using marshmallow schema exluding any information not nessacery
+    # Serializing all the reviews using marshmallow schema and excluding unnecessary info
     reviews_schema = ReviewSchema(many=True)
     serialized_reviews = reviews_schema.dump(reviews)
 
-    # Return all categories in JSOn format
+    # Return all reviews data in JSON format
     return jsonify(serialized_reviews), 200
 
-# # Get specific review
+# Get specific review
 
 
 @reviews_bp.route('/<int:review_id>', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def get_review(review_id):
-    # use stmt db.select query with scalar to select a specific review from the table,
-    # as long as ID matches all details of review will be returned as no security issues.
-    # if id is not in system will return a 404 error
+    # Querying a specific review and selecting it by the ID provided
     stmt = db.select(Review).filter_by(id=review_id)
     review = db.session.scalar(stmt)
+
+    # Handling the Retrieved ID and retruning as JSON
     if review:
         return ReviewSchema().dump(review)
     else:
+        # Retruning 404 if ID does not exist
         return {'error': 'Review not found'}, 404
 
 
@@ -44,6 +44,7 @@ def get_review(review_id):
 @jwt_required()
 def new_review():
     try:
+        # Sets current user variable to token
         current_user_id = get_jwt_identity()
         review_info = ReviewSchema().load(request.json)  # Load entire schema
 
@@ -62,6 +63,7 @@ def new_review():
         if existing_review:
             return jsonify({'error': 'You have already reviewed this product'}), 400
 
+        # Creating a new review and committing to the database
         review = Review(
             title=review_info['title'],
             message=review_info['message'],
@@ -72,7 +74,10 @@ def new_review():
         db.session.add(review)
         db.session.commit()
 
+        # Return the review as JSON
         return ReviewSchema().dump(review), 201
+
+    # Else returns and Integrity Error 500
     except IntegrityError:
         db.session.rollback()
         return jsonify({'error': 'Integrity error occurred while creating review'}), 500
@@ -81,28 +86,50 @@ def new_review():
 @reviews_bp.route('/<int:review_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_review(review_id):
+    # load the review information from request payload excluding some items
     review_info = ReviewSchema(exclude=['id', 'product_id']).load(request.json)
+
+    # Query the database for specific review by its ID
     stmt = db.select(Review).filter_by(id=review_id)
     review = db.session.scalar(stmt)
+
+    # Handling retrieved data
     if review:
+        # Check user authorisation before updating the review
         authorize(review.user_id)
+
+        # Update review data if the review exists
         review.title = review_info.get('title', review.title)
         review.message = review_info.get('message', review.message)
+
+        # Commit the changes to the database
         db.session.commit()
+
+        # Return updated review data as JSON
         return ReviewSchema().dump(review)
     else:
-        return {'error': 'Review not found'}, 401
+        # Returns a 404 error if ID does not exist
+        return {'error': 'Review not found'}, 404
 
 
 @reviews_bp.route('/<int:review_id>', methods=['DELETE'])
 @jwt_required()
 def delete_review(review_id):
+    # Queries the database to retrieve the specific review by ID
     stmt = db.select(Review).filter_by(id=review_id)
     review = db.session.scalar(stmt)
+
+    # Handles the retrieved data
     if review:
+        # Authorize the user before deleting the review
         authorize()
+
+        # Delete the selected review and commit changes to the database
         db.session.delete(review)
         db.session.commit()
+
+        # Returns message if successful deletion of review
         return ({'message': 'Review deleted successfully'})
     else:
+        # Returns error 404 if review does not exist
         return {'error': 'Review not found'}, 404
