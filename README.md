@@ -168,6 +168,28 @@ SQLAlchemy is a python SQL toolkit and Object-Relational Mapping (ORM) library. 
 It allows us to apply Object Orientated Programming(OOP) to the database and allows us to use database and SQL commands in a more robust manner.
 
 # R8 Describe your projects models in terms of the relationships they have with each other
+My project consists of four models representing the 4 tables in the database.
+### User Model
+1. Relationship with Products: One-to-many
+    - A user can have many products related to themselves. This is established by the products products db.relationship in the User model.
+2. Relationship with Review: One-to-many
+    - A user can write as many reviews as they like. This is established by the reviews db.relationship in the User model.
+### Product Model
+1. Relationship with User: Many-to-one
+    - Multiple products can be associated with one user. This is established by the user db.relationship in the Product model.
+2. Relationship with Category: Many-to-one
+    - Multiple products can belong to one category(T-shirt, Hoodie, Sweater - can all be associated with "Tops" category). This is established by the category db.relationship in the Product model.
+3. Relationship with Review: One-to-many
+    - A product can have multiple reviews attached to it. This is established through the review db.relationship in the Product model.
+### Category Model
+1. Relationship with Product: One-to-many
+    - A category can have multiple products associated with it. This is established through the product db.relationship in the Category model.
+### Review Model
+1. Relationship to User: Many-to-one
+    - Multiple reviews can be associated with a single user. This is established through the user db.relationship in the Review model.
+2. Relationship to Product: Many-to-one
+    - Multiple reviews can be attached to one product. This is established through the product db.relationship in the Review model.
+
 
 # R9 Discuss the database relations to be implemented in your application
 
