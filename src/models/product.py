@@ -1,4 +1,4 @@
-from setup import db, ma 
+from setup import db, ma
 from marshmallow import fields
 
 
@@ -16,7 +16,8 @@ class Product(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='products')
 
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        'categories.id'), nullable=False)
     category = db.relationship('Category', back_populates='products')
 
     reviews = db.relationship('Review', back_populates='product')
@@ -30,4 +31,5 @@ class ProductSchema(ma.Schema):
     category_id = fields.Integer()
 
     class Meta:
-        fields = ('id', 'name', 'description', 'price', 'color', 'date_created', 'category_id', 'user_id')
+        fields = ('id', 'name', 'description', 'price', 'color',
+                  'date_created', 'category_id', 'user_id')

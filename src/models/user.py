@@ -2,6 +2,7 @@ from setup import db, ma
 from marshmallow import fields
 from marshmallow.validate import Length
 
+
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -18,7 +19,8 @@ class User(db.Model):
 
 class UserSchema(ma.Schema):
     email = fields.Email(required=True)
-    password = fields.String(required=True, validate=Length(min=6, max=20, error='Password must be between 6 and 20 characters'))
+    password = fields.String(required=True, validate=Length(
+        min=6, max=20, error='Password must be between 6 and 20 characters'))
 
     class Meta:
         fields = ('id', 'name', 'email', 'password', 'is_admin')

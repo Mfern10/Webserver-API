@@ -1,4 +1,4 @@
-from setup import db, ma 
+from setup import db, ma
 from marshmallow import fields
 
 
@@ -11,6 +11,7 @@ class Category(db.Model):
     description = db.Column(db.Text, nullable=False)
 
     products = db.relationship('Product', back_populates='category')
+
 
 class CategorySchema(ma.Schema):
     name = fields.String(required=True)

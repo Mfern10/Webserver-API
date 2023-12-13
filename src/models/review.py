@@ -1,4 +1,4 @@
-from setup import db, ma 
+from setup import db, ma
 from marshmallow import fields
 
 
@@ -13,8 +13,10 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='reviews')
 
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey(
+        'products.id'), nullable=False)
     product = db.relationship('Product', back_populates='reviews')
+
 
 class ReviewSchema(ma.Schema):
     title = fields.String()
