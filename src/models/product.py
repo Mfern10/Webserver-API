@@ -1,5 +1,6 @@
 from setup import db, ma
 from marshmallow import fields
+from models.review import ReviewSchema
 
 
 class Product(db.Model):
@@ -30,6 +31,9 @@ class ProductSchema(ma.Schema):
     color = fields.String()
     category_id = fields.Integer()
 
+    # Nested the reviews within the ProductSchema using Nested field
+    reviews = fields.Nested(ReviewSchema, many=True, exclude=['product_id'])
+
     class Meta:
         fields = ('id', 'name', 'description', 'price', 'color',
-                  'date_created', 'category_id', 'user_id')
+                  'date_created', 'category_id', 'user_id', 'reviews')

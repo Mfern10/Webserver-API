@@ -99,6 +99,10 @@ This endpoint allows a user to get a lst of all products and the information. It
 
 ![products endpoint that shows all products in DB](/docs/all_products.png)
 
+The products also nests in the reviews for each product and lists them
+
+![reviews nested](/docs/products&reviews.png)
+
 ### /products/{id} - GET
 This endpoint allows the user to retrieve a specific product by specifying the products ID. users select statment to select the matching ID and returns it with scalar to dump the schema as a JSON object.
 
