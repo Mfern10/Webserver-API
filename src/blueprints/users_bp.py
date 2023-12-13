@@ -8,84 +8,101 @@ from datetime import timedelta
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 
-# def current_user_is_admin():
-#     current_user_id = get_jwt_identity()
-#     user = User.query.filter_by(id=current_user_id, is_admin=True).first()
-#     return user is not None
+# Create new user
 
 
 @users_bp.route('/register', methods=['POST'])
 def register():
     try:
+        # Load the user info from the request excluding items
         user_info = UserSchema(exclude=['id', 'is_admin']).load(request.json)
+
+        # Create a new User instance with a hashed password
         user = User(
             name=user_info['name'],
             email=user_info['email'],
             password=bcrypt.generate_password_hash(
                 user_info['password']).decode('utf8')
         )
-        # Add and commit the new user information
+
+        # Add the new user to the database and commit the changes
         db.session.add(user)
         db.session.commit()
-        # Return the new user information
+
+        # Return the new user information excluding the password for security
         return UserSchema(exclude=['password']).dump(user), 201
     except IntegrityError:
+        # Returns an error if the email address has already been used
         return {'error': 'Email address is already being used'}, 409
 
-# gets all users ** make sure it is authroized for admins only **
 
-
+# Get all users
 @users_bp.route('/', methods=['GET'])
 def all_users():
-    # use query to retrieve all users from the database, Using query.all() instead of scalar
-    # as scalar is better for a single user but here I want to retrieve all users from the database.
+    # Use query to retrieve all users from the database
+    # Using query.all() to get all users instead of scalar
     users = User.query.all()
 
-    # Serialize the users using Marshamllow schema making sure to exclude passwords
+    # Serialize the retrieved users using marshmallow schema
+    # Ensure exclusion of password in seialized data
     users_schema = UserSchema(many=True, exclude=['password'])
     serialized_users = users_schema.dump(users)
 
     # Return the serialized users as a JSON response
     return jsonify(serialized_users), 200
 
+# Login user and create token
+
 
 @users_bp.route('/login', methods=['POST'])
 def login():
-    # Parse incoming POST body through user schema
+    # Deserialize incoming JSON request data using UserSchema
     user_info = UserSchema(
         exclude=['id', 'name', 'is_admin']).load(request.json)
     print(user_info)
 
-    # Select the user with email that matches the one in the POST body using select query and scalar
-    # Cross check the password hash
+    # Query the database to find a user with an email matching the one provided
+    # Verify the password hash to authentice the user
     stmt = db.select(User).where(User.email == user_info['email'])
     user = db.session.scalar(stmt)
+
     if user and bcrypt.check_password_hash(user.password, user_info['password']):
 
-        # Create a JWT token for the user
+        # Generate a JWT token for the authenticated user with and expiration time
         token = create_access_token(
             identity=user.id, expires_delta=timedelta(hours=8))
 
-        # Return the JWT token or error if login details dont match
+        # Return the JWT token and serialized user data excluding password for security
         return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
     else:
+        # Returns error message if provided login credentials are incorrect
         return {'error': 'Invalid email or password'}, 401
 
-# Deletes the user from database only if the user is deleting themselves or user is ADMIN
+# Delete a user
 
 
 @users_bp.route('/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
     try:
+        # Retrieve a specific user by their ID using a select query and scalar
         stmt = db.select(User).filter_by(id=user_id)
         user = db.session.scalar(stmt)
+
+        # Handle the retrieved data
         if user:
+            # Authorize the deletion by checking the users authorization
             authorize(user_id)
+
+            # Delete the user and commit the changes to database
             db.session.delete(user)
             db.session.commit()
+
+            # Return a message for successful deletion
             return ({'message': 'User deleted successfully'}), 200
         else:
+            # Return error if the user ID is not found in the database
             return {'error': 'User not found'}, 404
     except AttributeError:
+        # Return and error if the user is not authorized
         return {'error': 'You are not authorized to perform this action'}, 401
