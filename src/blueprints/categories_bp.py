@@ -76,7 +76,7 @@ def new_category():
 @jwt_required()
 def update_category(category_id):
     # Loading user-provided data and querying the category by ID
-    category_info = CategorySchema(exclude=['id']).load(request.json)
+    category_info = CategorySchema(exclude=['id'], partial=True).load(request.json)
     stmt = db.select(Category).filter_by(id=category_id)
     category = db.session.scalar(stmt)
 

@@ -19,8 +19,8 @@ class Review(db.Model):
 
 
 class ReviewSchema(ma.Schema):
-    title = fields.String()
-    message = fields.String()
+    title = fields.String(required=True)
+    message = fields.String(required=True)
 
     class Meta:
         fields = ('id', 'title', 'message', 'user_id', 'product_id')

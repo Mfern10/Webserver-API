@@ -25,11 +25,11 @@ class Product(db.Model):
 
 
 class ProductSchema(ma.Schema):
-    name = fields.String()
-    description = fields.String()
-    price = fields.Float()
-    color = fields.String()
-    category_id = fields.Integer()
+    name = fields.String(required=True)
+    description = fields.String(required=True)
+    price = fields.Float(required=True)
+    color = fields.String(required=True)
+    category_id = fields.Integer(required=True)
 
     # Nested the reviews within the ProductSchema using Nested field
     reviews = fields.Nested(ReviewSchema, many=True, exclude=['product_id'])

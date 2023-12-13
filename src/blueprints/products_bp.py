@@ -84,7 +84,7 @@ def new_product():
 def update_product(product_id):
     # Loading and validating the user provided data using ProductSchema
     product_info = ProductSchema(
-        exclude=['id', 'user_id', 'date_created']).load(request.json)
+        exclude=['id', 'user_id', 'date_created'], partial=True).load(request.json)
 
     # Uses Selecy to query the specific product by its ID
     stmt = db.select(Product).filter_by(id=product_id)

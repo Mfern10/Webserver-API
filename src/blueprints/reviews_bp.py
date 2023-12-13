@@ -87,7 +87,7 @@ def new_review():
 @jwt_required()
 def update_review(review_id):
     # load the review information from request payload excluding some items
-    review_info = ReviewSchema(exclude=['id', 'product_id']).load(request.json)
+    review_info = ReviewSchema(exclude=['id', 'product_id'], partial=True).load(request.json)
 
     # Query the database for specific review by its ID
     stmt = db.select(Review).filter_by(id=review_id)
