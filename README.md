@@ -1,4 +1,20 @@
-# R1 - Identification of the problem you are trying to solve by building this particular app
+# Table of Contents
+1. [Installation Instructions](#installation)
+2. [R1 - Identification of the problem you are trying to solve by building this particular app](#R1)
+3. [R2 - Why is it a problem that needs solving?](#R2)
+4. [R3 - Why have you chosen this database system. What are the drawbacks compared to others?](#R3)
+5. [R4 - Identify and discuss the key functionalities and benefits of an ORM](#R4)
+6. [R5 - Document all endpoints for your API](#R5)
+7. [R6 - An ERD for your app](#R6)
+8. [R7 - Detail any third party services that your app will use](#R7)
+9. [R8 - Describe your projects models in terms of the relationships they have with each other](#R8)
+10. [R9 - Discuss the database relations to be implemented in your application](#R9)
+11. [R10 - Describe the way tasks are allocated and tracked in your project <a name='R10'></a>](#R10)
+
+# Installation Instructions <a name="installation"></a> 
+
+
+# R1 - Identification of the problem you are trying to solve by building this particular app <a name="R1"></a>
 This is an Online Clothing Store Catalogue, which will help users add data and retrieve data about there products(clothing items). 
 
 The main goal for developing the Online Clothing Store Catalogue API is to help streamline and ehance functionality, accessibility and integration of clothing store catalogues. The API aims to solve some key problems:
@@ -7,14 +23,14 @@ The main goal for developing the Online Clothing Store Catalogue API is to help 
 3. Scalability: The API offers a variety of features but is an adaptable and scalable solution being easily updated and able to add new features to this base product as your store grows, without disrupting the core system.
 4. Marketing and sales: The API will be an alternative option to using costly third party applications. This App will give the user more control and flexibility to manage their own products for their own websites.
 
-# R2 - Why is it a problem that needs solving?
+# R2 - Why is it a problem that needs solving? <a name="R2"></a>
 The problems Listed above are significant issues when it comes to running a online clothing store. These problems can slow growth reduce capital and diminish user experience. 
 
 - Integration complexity can slow down expansion and growth of a store across multiple platforms, restricting customer engagement.
 - Outdated product information can lead to customer mistrust and dissatisfaction, which has a negative impact to your brand.
 - New business owners need a flexible, easy to use and cost effective way to manage there product information. With a small amount of knowledge in IT a user can simply use this API for there store. Reducing there capital and avoiding using costly third party services.
 
-# R3 - Why have you chosen this database system. What are the drawbacks compared to others?
+# R3 - Why have you chosen this database system. What are the drawbacks compared to others? <a name="R3"></a>
 I have chosen to use PostgreSQL as my Database for my project. PostgreSQL is a very popular relational database system that offers multiple advantages making it a great choice for my application. Some of the advantages to using PostgreSQL for my application are:
 
 - Scalability: PostgreSQL offers great flexibility and scalability options allowing for handling of small or large data volumes and user requests which is essential for a Clothing store catalog application. Being able to handle larger data loads as the application grows.
@@ -30,7 +46,7 @@ Some Draw backs of PostgreSQL compared to MySQL:
 - Both MySQL and PostgreSQL are Relational Database Management Systems but PostgreSQL actually a Object-Relational Database Management System this supports the use of Object Relational Mapping, and depending on your application can be positive or negative.
 
 sources : https://www.integrate.io/blog/postgresql-vs-mysql-which-one-is-better-for-your-use-case/#:~:text=PostgreSQL%20is%20preferred%20for%20managing,comes%20to%20read%2Donly%20queries.
-# R4 Identify and discuss the key functionalities and benefits of an ORM
+# R4 - Identify and discuss the key functionalities and benefits of an ORM <a name="R4"></a>
 An ORM means Object-Raltional mapping. This is used for implicationg OOP or Object Orientated Programming code with Database systems to help simplify relational databases. Using and ORM such as SQLAlchemy with Flask and PostgreSQL allows you to easily import OOP into your Database application while still haveing the functionality of SQL commands and db commands. Some key features and benefits of an ORM such as SQLAlchemy are:
 
 - Allows us to work with Python objects instead of raw SQL commands making our code cleaner and more simplified. eg. Using SQLAlchemy you can define database models tables and data as python classes and objects.
@@ -41,7 +57,7 @@ There are several benefits to using SQLAlchemy and I have chosen to use it for m
 
 sources: https://vegibit.com/what-is-the-role-of-sqlalchemy-in-python-database-interactions/#advantages-of-using-sqlalchemy
 
-# R5 Document all endpoints for your API
+# R5 - Document all endpoints for your API <a name="R5"></a>
 ## User Endpoints
 ### /users/ - GET 
 This endpoint allows a user to access all users in the database. This endpoint uses SQL User.query.all() to get all users and serializes them to be returned and Displayed in JSON format. It excludes sensitive information for security purposes.
@@ -225,11 +241,11 @@ This endpoint deletes a review from the system. it uses db.select to select the 
 
 ![enpoint that deletes a review](/docs/success_delete_review.png)
 ![failed delete](/docs/failed_delete_review.png)
-# R6 An ERD for your app
+# R6 - An ERD for your app <a name="R6"></a>
 This outlines the ERD for my application. My application uses 4 models that have different relationships with each other. It uses crows foot notation to show the relationships between my entities in the diagram. 
 ![ERD for Webserver API](/docs/ERD.png)
 
-# R7 Detail any third party services that your app will use
+# R7 - Detail any third party services that your app will use <a name="R7"></a>
 
 ### Bcrypt
 Flask Bcrypt is and extension of the Python Framework Flask. It is used for password hashing and verification, It provides a way to hash the passwords before they are stored in the database for security.
@@ -243,7 +259,7 @@ Psycopg2 binary is a python library used to interact with the database(PostgreSQ
 SQLAlchemy is a python SQL toolkit and Object-Relational Mapping (ORM) library. It uses a high level interface to interact with relational databases such as PostgreSQL through python. 
 It allows us to apply Object Orientated Programming(OOP) to the database and allows us to use database and SQL commands in a more robust manner.
 
-# R8 Describe your projects models in terms of the relationships they have with each other
+# R8 - Describe your projects models in terms of the relationships they have with each other <a name="R8"></a>
 My project consists of four models representing the 4 tables in the database.
 ### User Model
 1. Relationship with Products: One-to-many
@@ -267,7 +283,7 @@ My project consists of four models representing the 4 tables in the database.
     - Multiple reviews can be attached to one product. This is established through the product db.relationship in the Review model.
 
 
-# R9 Discuss the database relations to be implemented in your application
+# R9 - Discuss the database relations to be implemented in your application <a name="R9"></a>
 The database relations of my application to be implemented consist of four main tables in the database some relating to others. The following relations are linked by using Foreign keys and database relations. Here is a breakdown of what relationships are within the database and what time of relationship they have with each other:
 
 1. Users:
@@ -289,7 +305,7 @@ The database relations of my application to be implemented consist of four main 
     - Reviews holds a ForeignKey for both user_id abd product_id. and db.reltionship is held in each table to connect the relationship.
 
 
-# R10 Describe the way tasks are allocated and tracked in your project
+# R10 - Describe the way tasks are allocated and tracked in your project <a name="R10"></a>
 For my project I followed an agile methodology. Before Starting my code I carefully planned my ERD and broke my project down into points of documentation/models/blueprints/endpoints. I used trello to track my progress Throughout the development of my project. 
 
 I started by listing out cards on trello for the initial stages of my project.
