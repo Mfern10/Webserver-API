@@ -1,10 +1,11 @@
 from setup import bcrypt, db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify 
 from models.user import UserSchema, User
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from auth import authorize
 from datetime import timedelta
+from marshmallow.validate import ValidationError
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 
@@ -16,6 +17,15 @@ def register():
     try:
         # Load the user info from the request excluding items
         user_info = UserSchema(exclude=['id', 'is_admin']).load(request.json)
+
+
+        # Check for email already in use
+        existing_user = User.query.filter_by(email=user_info['email']).first()
+        if existing_user:
+            return jsonify({'error': 'Email address is already being used'}), 409
+        
+        if not all(key in user_info for key in ['name', 'email', 'password']):
+            return jsonify({'error': 'Name, email and password are required'}), 404
 
         # Create a new User instance with a hashed password
         user = User(
@@ -31,9 +41,9 @@ def register():
 
         # Return the new user information excluding the password for security
         return UserSchema(exclude=['password']).dump(user), 201
-    except IntegrityError:
+    except ValidationError as e:
         # Returns an error if the email address has already been used
-        return {'error': 'Email address is already being used'}, 409
+        return jsonify({'error': 'Name, email and password is required'}), 400
 
 
 # Get all users
@@ -51,6 +61,21 @@ def all_users():
 
     # Return the serialized users as a JSON response
     return jsonify(serialized_users), 200
+
+# Get one user
+@users_bp.route('/<int:user_id>', methods=['GET'])
+@jwt_required()
+def one_user(user_id):
+    # Use query to retrieve all users from the database
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+
+    if user:
+        return UserSchema(exclude=['password']).dump(user), 200
+    else:
+        return {'error': 'User not found'}, 404
+
+
 
 # Login user and create token
 

@@ -21,9 +21,9 @@ app.register_blueprint(reviews_bp)
 def validation_error_handler(error):
     return jsonify.error({'error': error.messages}), 400
 
-@app.errorhandler(Exception)
-def unexpected_error_handler(error):
-    app.logger.error(f"An unexpected error occurred: {error}")
-    return jsonify({'error': 'An unexpected error occurred'}), 500
+# @app.errorhandler(Exception)
+# def unexpected_error_handler(error):
+#     app.logger.error(f"An unexpected error occurred: {error}")
+#     return jsonify({'error': 'An unexpected error occurred'}), 500
 
 
