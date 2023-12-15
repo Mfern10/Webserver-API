@@ -1,0 +1,4 @@
+FLASK_RUN_PORT=6666
+FLASK_DEBUG=true
+JWT_KEY= # You must provide the JWT KEY here to work with your database
+DB_URI= # You must provide the appropriate URI to run with your database here.

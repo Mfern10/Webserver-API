@@ -12,9 +12,9 @@
 11. [R10 - Describe the way tasks are allocated and tracked in your project <a name='R10'></a>](#rten)
 
 # Installation Instructions <a name="installation"></a>
-## Windows User Guide
-1.  Start PostgreSQL Server with - ```sudo service postgresql start ```
-2.  ```psql```
+## User Guide
+1.  Start PostgreSQL Server with - ```sudo service postgresql start ``` or ```psql postgres```
+2.  ```psql``` or ```psql postgres```
 3. ```create database web_server_api```
 ## Open a second WSL command line and run the following commands:
 1. ```python3 -m venv .venv```
@@ -24,6 +24,7 @@
 5. ```flask db seed```
 6. ```flask run```
 7. Open insomnia/hoppscotch/postman or preferred application and use localhost:6666 as this is the port set in .flaskenv
+8. flaskenv_sample has the required fields that need to be created to run the application.
 
 
 
@@ -87,6 +88,8 @@ gets one user from the database specific to the supplied id.
 - Required Data: Specific ID in route
 - Expected Response: JSON response of the user matching the user id
 - Authentication: JWT token required
+
+![gets one user](/docs/one-user.png)
 
 
 ### /users/register - POST
