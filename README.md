@@ -11,7 +11,20 @@
 10. [R9 - Discuss the database relations to be implemented in your application](#rnine)
 11. [R10 - Describe the way tasks are allocated and tracked in your project <a name='R10'></a>](#rten)
 
-# Installation Instructions <a name="installation"></a> 
+# Installation Instructions <a name="installation"></a>
+## Windows User Guide
+1.  Start PostgreSQL Server with - ```sudo service postgresql start ```
+2.  ```psql```
+3. ```create database web_server_api```
+## Open a second WSL command line and run the following commands:
+1. ```python3 -m venv .venv```
+2. Activate virtual environment - ```source .venv/bin/activate```
+3. ```pip install -r requirements.txt```
+4. ```flask db create```
+5. ```flask db seed```
+6. ```flask run```
+7. Open insomnia/hoppscotch/postman or preferred application and use localhost:6666 as this is the port set in .flaskenv
+
 
 
 # R1 - Identification of the problem you are trying to solve by building this particular app <a name="rone"></a>
@@ -67,6 +80,14 @@ This endpoint allows a user to access all users in the database. This endpoint u
 - Authentication: JWT token required
 
 ![Shows users endpoint in insomnia](/docs/all_users.png)
+
+### /users/{id} - GET
+gets one user from the database specific to the supplied id. 
+- HTTP VERBS: GET
+- Required Data: Specific ID in route
+- Expected Response: JSON response of the user matching the user id
+- Authentication: JWT token required
+
 
 ### /users/register - POST
 This endpoint is a POST/Create, the endpoint is used for registering as a new user in the database. The user can input the required fields in insomnia/postman in JSON format and register as long as the email address is valid and not already in use. It uses TRY/EXCEPT handling for Integrity errors to ensure this. The register endpoint also uses bcrypt to hash the users password for security. 
